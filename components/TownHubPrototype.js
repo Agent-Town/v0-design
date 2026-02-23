@@ -171,7 +171,6 @@ const MODAL_CONFIG = {
 
 /* --- Main TownHubPrototype --- */
 export default function TownHubPrototype() {
-  console.log("[v0] TownHubPrototype rendering");
   const [activeModal, setActiveModal] = useState(null);
 
   const openModal = useCallback((id) => setActiveModal(id), []);

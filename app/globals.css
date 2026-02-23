@@ -886,37 +886,407 @@ a { color: inherit; text-decoration: none; }
   gap: 14px;
 }
 
-.atlasMap {
-  position: relative;
+/* Search bar */
+.atlasSearchBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(255,248,232,0.95), rgba(240,223,192,0.95));
   border: 2px solid var(--dark-wood);
   border-radius: var(--radius-md);
-  min-height: 320px;
-  background: linear-gradient(180deg, #5B8A8A, #3d6666);
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(46,27,14,0.12);
 }
 
-.atlasNode {
+.atlasSearchIcon {
+  font-size: 16px;
+  flex-shrink: 0;
+  filter: grayscale(0.4);
+}
+
+.atlasSearchInput {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--dark-wood);
+  background: transparent;
+  border: none;
+  outline: none;
+  min-width: 0;
+}
+
+.atlasSearchInput::placeholder {
+  color: var(--aged-brass);
+  font-style: italic;
+}
+
+.atlasFilterSelect {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--dark-wood);
+  background: var(--sand);
+  border: 2px solid var(--aged-brass);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+  outline: none;
+}
+
+.atlasFilterSelect:focus {
+  border-color: var(--ochre);
+}
+
+/* The map */
+.atlasMap {
+  position: relative;
+  border: 3px solid var(--dark-wood);
+  border-radius: var(--radius-md);
+  min-height: 360px;
+  background-image: url('/images/atlas-map-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 40px rgba(46,27,14,0.25),
+    0 4px 16px rgba(46,27,14,0.2);
+}
+
+/* SVG trail lines */
+.atlasTrails {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Compass */
+.atlasCompass {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.atlasCompassN {
+  position: absolute;
+  top: -2px;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  color: var(--rust-red);
+  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+}
+
+.atlasCompassRose {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--aged-brass);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,228,160,0.3), transparent 70%);
+  position: relative;
+}
+
+.atlasCompassRose::before,
+.atlasCompassRose::after {
+  content: '';
+  position: absolute;
+  background: var(--aged-brass);
+}
+
+.atlasCompassRose::before {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.atlasCompassRose::after {
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* District plot markers - look like small buildings */
+.atlasPlot {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease-bounce), filter 0.2s;
+  z-index: 4;
+  padding: 0;
+}
+
+.atlasPlot:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  filter: brightness(1.1);
+  z-index: 5;
+}
+
+.atlasPlot.active {
+  z-index: 6;
+  filter: brightness(1.15);
+}
+
+.atlasPlotBuilding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s var(--ease-bounce);
+}
+
+/* Triangular roof */
+.atlasPlotRoof {
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 14px solid var(--rust-red);
+  filter: drop-shadow(0 -1px 2px rgba(0,0,0,0.3));
+}
+
+.atlasPlot.active .atlasPlotRoof {
+  border-bottom-color: var(--ochre);
+}
+
+/* Building body */
+.atlasPlotBody {
+  width: 32px;
+  height: 24px;
+  background: linear-gradient(180deg, var(--warm-cream), var(--sand-dark));
+  border: 2px solid var(--dark-wood);
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.atlasPlotIcon {
+  font-size: 12px;
+}
+
+/* Name sign hanging below */
+.atlasPlotSign {
+  background: rgba(46,27,14,0.85);
+  color: var(--sunlight);
+  font-family: var(--font-heading);
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--ochre);
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.atlasPlotCount {
+  font-family: var(--font-body);
+  font-size: 9px;
+  color: var(--dark-wood);
+  background: rgba(255,248,232,0.85);
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* Active glow ring */
+.atlasPlotGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid var(--ochre);
+  background: radial-gradient(circle, rgba(255,228,160,0.2), transparent 70%);
+  animation: pulse 2.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Map legend */
+.atlasLegend {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255,248,232,0.92);
   border: 2px solid var(--dark-wood);
   border-radius: var(--radius-sm);
-  background: linear-gradient(180deg, var(--warm-cream), var(--sand-dark));
-  padding: 8px 10px;
-  min-width: 110px;
-  text-align: left;
-  cursor: pointer;
-  font-size: 12px;
-  transition: transform 0.2s var(--ease-bounce), box-shadow 0.2s;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.atlasNode:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 12px rgba(255, 228, 160, 0.4);
-  z-index: 2;
-}
-
-.atlasNode strong {
+.atlasLegendTitle {
   font-family: var(--font-heading);
-  font-size: 12px;
+  font-size: 10px;
+  color: var(--dark-wood);
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--sand-dark);
+  padding-bottom: 4px;
+}
+
+.atlasLegendRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #6e5a45;
+}
+
+.atlasLegendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* List view alternative */
+.atlasListView {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.atlasListItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, rgba(255,248,232,0.9), rgba(240,223,192,0.9));
+  border: 2px solid var(--sand-dark);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s var(--ease-bounce), box-shadow 0.15s;
+  text-align: left;
+}
+
+.atlasListItem:hover,
+.atlasListItem.active {
+  border-color: var(--ochre);
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 var(--ochre), 0 2px 8px rgba(46,27,14,0.12);
+}
+
+.atlasListIcon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.atlasListInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.atlasListInfo strong {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  color: var(--dark-wood);
+}
+
+.atlasListStats {
+  flex-shrink: 0;
+}
+
+/* District detail panel */
+.atlasDetail {
+  background: linear-gradient(180deg, rgba(255,248,232,0.95), rgba(240,223,192,0.95));
+  border: 3px solid var(--dark-wood);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(46,27,14,0.12);
+  position: relative;
+}
+
+.atlasDetailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.atlasDetailTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.atlasDetailTitle h3 {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  color: var(--dark-wood);
+}
+
+.atlasDetailIcon {
+  font-size: 20px;
+}
+
+.atlasDetailScene {
+  font-size: 13px;
+  color: #6e5a45;
+  font-style: italic;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed rgba(139,125,60,0.3);
+}
+
+/* Storefront cards within a district */
+.atlasStorefronts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.atlasStorefrontCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background:
+    linear-gradient(180deg, rgba(255,248,232,0.85), rgba(240,223,192,0.85)),
+    url('/images/parchment-bg.jpg');
+  background-size: cover;
+  border: 2px solid var(--sand-dark);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, transform 0.2s var(--ease-bounce), box-shadow 0.2s;
+}
+
+.atlasStorefrontCard:hover {
+  border-color: var(--faded-teal);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(46,27,14,0.18);
+}
+
+.atlasStorefrontSign {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  color: var(--dark-wood);
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid rgba(139,125,60,0.25);
 }
 
 .market {

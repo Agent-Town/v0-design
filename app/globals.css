@@ -1,6 +1,8 @@
-/* ──────────────────────────────────────────────
-   Agent Town — Cozy Wild-West Game UI
-   ────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Agent Town - Cozy Wild-West Game UI */
 
 :root {
   --ochre: #C4883A;
@@ -38,7 +40,7 @@ html, body {
 
 a { color: inherit; text-decoration: none; }
 
-/* ─── SHELL ─────────────────────────────────── */
+/* SHELL */
 .shell {
   height: 100vh;
   height: 100dvh;
@@ -48,7 +50,7 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-/* ─── TOWN MAP ──────────────────────────────── */
+/* TOWN MAP */
 .townMap {
   flex: 1;
   position: relative;
@@ -68,7 +70,7 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
 }
 
-/* ─── DISTRICT HOTSPOTS ─────────────────────── */
+/* DISTRICT HOTSPOTS */
 .districtHotspot {
   position: absolute;
   display: flex;
@@ -121,7 +123,7 @@ a { color: inherit; text-decoration: none; }
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* ─── MAP STATS CHIPS ───────────────────────── */
+/* MAP STATS CHIPS */
 .mapStats {
   position: absolute;
   bottom: 12px;
@@ -145,7 +147,7 @@ a { color: inherit; text-decoration: none; }
   text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
-/* ─── BRAND OVERLAY ─────────────────────────── */
+/* BRAND OVERLAY */
 .brandOverlay {
   position: fixed;
   top: 12px;
@@ -222,7 +224,7 @@ a { color: inherit; text-decoration: none; }
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* ─── NAV DRAWER ────────────────────────────── */
+/* NAV DRAWER */
 .navDrawer {
   position: fixed;
   top: 60px;
@@ -258,7 +260,7 @@ a { color: inherit; text-decoration: none; }
   border-color: var(--ochre);
 }
 
-/* ─── AGENT DOCK (Game HUD) ─────────────────── */
+/* AGENT DOCK (Game HUD) */
 .dock {
   position: fixed;
   bottom: 16px;
@@ -307,7 +309,7 @@ a { color: inherit; text-decoration: none; }
   gap: 0;
 }
 
-/* ─── DOCK CHAT ─────────────────────────────── */
+/* DOCK CHAT */
 .chat {
   display: flex;
   flex-direction: column;
@@ -404,7 +406,7 @@ a { color: inherit; text-decoration: none; }
   transform: scale(0.95);
 }
 
-/* ─── DEBUG DRAWER ──────────────────────────── */
+/* DEBUG DRAWER */
 .debugDrawer {
   position: fixed;
   bottom: 80px;
@@ -464,7 +466,7 @@ a { color: inherit; text-decoration: none; }
   word-break: break-all;
 }
 
-/* ─── STATUS CHIP ───────────────────────────── */
+/* STATUS CHIP */
 .chip {
   font-family: var(--font-body);
   font-size: 11px;
@@ -492,7 +494,7 @@ a { color: inherit; text-decoration: none; }
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* ─── GENERIC BUTTONS ───────────────────────── */
+/* GENERIC BUTTONS */
 .btn {
   font-family: var(--font-body);
   font-size: 13px;
@@ -566,7 +568,7 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(180deg, var(--sunlight), var(--sand));
 }
 
-/* ─── MODAL OVERLAY ─────────────────────────── */
+/* MODAL OVERLAY */
 .modalBackdrop {
   position: fixed;
   inset: 0;
@@ -644,7 +646,7 @@ a { color: inherit; text-decoration: none; }
   overflow-y: auto;
 }
 
-/* ─── PANELS & CARDS ────────────────────────── */
+/* PANELS AND CARDS */
 .panel {
   background: var(--warm-cream);
   border: 2px solid var(--dark-wood);
@@ -665,7 +667,7 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.5;
 }
 
-/* --- LAYOUT HELPERS --- */
+/* LAYOUT HELPERS */
 .row {
   display: flex;
   gap: 8px;
@@ -679,7 +681,7 @@ a { color: inherit; text-decoration: none; }
   gap: 14px;
 }
 
-/* ─── LIST / TABLE ──────────────────────────── */
+/* LIST AND TABLE */
 .listCompact {
   display: flex;
   flex-direction: column;
@@ -742,7 +744,7 @@ a { color: inherit; text-decoration: none; }
   background: var(--sunlight);
 }
 
-/* ─── ATLAS (inside modal) ──────────────────── */
+/* ATLAS (inside modal) */
 .atlasGrid {
   display: flex;
   flex-direction: column;
@@ -815,7 +817,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 14px;
 }
 
-/* ─── INPUT ─────────────────────────────────── */
+/* INPUT */
 .input {
   font-family: var(--font-body);
   font-size: 14px;
@@ -837,7 +839,7 @@ select.input {
   cursor: pointer;
 }
 
-/* ─── IMAGE PLACEHOLDER ─────────────────────── */
+/* IMAGE PLACEHOLDER */
 .imagePlaceholder {
   min-height: 160px;
   border: 2px dashed var(--aged-brass);
@@ -851,7 +853,7 @@ select.input {
   font-style: italic;
 }
 
-/* ─── CODE BLOCK ────────────────────────────── */
+/* CODE BLOCK */
 .codeBlock {
   margin: 0;
   border: 2px solid var(--aged-brass);
@@ -865,7 +867,7 @@ select.input {
   line-height: 1.6;
 }
 
-/* ─── ANIMATIONS ────────────────────────────── */
+/* ANIMATIONS */
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.6; transform: scale(1.3); }
@@ -891,34 +893,25 @@ select.input {
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* ─── SCROLLBAR ─────────────────────────────── */
+/* SCROLLBAR */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--sand-dark); border-radius: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--aged-brass); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--ochre); }
 
-/* ─── RESPONSIVE ────────────────────────────── */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .gridTwo { grid-template-columns: 1fr; }
-  .tableHeader, .tableRow { grid-template-columns: 2fr 1fr 1fr; }
-  .tableHeader span:last-child, .tableRow span:last-child { display: none; }
-  
-  .brandTitle { display: none; }
-  
-  .dock { max-width: none; width: calc(100% - 24px); bottom: 10px; }
-  .debugDrawer { max-width: none; width: calc(100% - 24px); bottom: 70px; }
-  
   .hotspotLabel { font-size: 10px; padding: 4px 8px; }
-  
+  .dock { max-width: 100%; width: calc(100% - 16px); bottom: 8px; }
+  .debugDrawer { max-width: 100%; width: calc(100% - 16px); }
+  .modalBody { padding: 14px; }
   .modal { border-radius: var(--radius-md); }
-  .modalBody { padding: 16px; }
-  
-  .mapStats { gap: 4px; }
-  .mapChip { font-size: 10px; padding: 3px 8px; }
 }
 
 @media (max-width: 480px) {
-  .dock { width: calc(100% - 16px); bottom: 8px; border-radius: var(--radius-md); }
-  .debugDrawer { width: calc(100% - 16px); }
-  .hotspotLabel { font-size: 9px; }
+  .mapStats { flex-wrap: wrap; gap: 4px; }
+  .brandTitle { display: none; }
+  .tableHeader, .tableRow { grid-template-columns: 2fr 1fr 1fr; }
+  .tableHeader > *:last-child, .tableRow > *:last-child { display: none; }
 }

@@ -171,7 +171,7 @@ const MODAL_CONFIG = {
   share:       { title: 'Share Card', Component: ShareModal }
 };
 
-/* ──────────────────────────────────────────────────────────────────── */
+/* ──────────────────────��───────────────────────────────────────────── */
 /*  Main TownHubPrototype                                              */
 /* ──────────────────────────────────────────────────────────────────── */
 export default function TownHubPrototype() {

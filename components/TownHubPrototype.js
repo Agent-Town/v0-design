@@ -1,182 +1,256 @@
 'use client';
 
-import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { DISTRICTS, getStorefrontsByDistrict } from '../lib/mockData';
+import { useMemo, useState, useCallback, useEffect } from 'react';
+import { DISTRICTS, LEADERBOARD_ROWS, TRAINER_ATTEMPTS, getStorefrontsByDistrict } from '../lib/mockData';
+import BrandOverlay from './TopBar';
+import AgentDock from './AgentDock';
+import AtlasPrototype from './AtlasPrototype';
 
-const DISTRICT_DETAILS = {
-  house: {
-    title: 'Plan Wagons',
-    body: 'Unlock and manage your house, claim flow, media slots, and referral share assets.',
-    links: [
-      { href: '/house', label: 'Open House' },
-      { href: '/share/demo-house', label: 'Open Share Demo' }
-    ]
-  },
-  leaderboard: {
-    title: 'Town Board',
-    body: 'Browse active teams, referral activity, and service storefront momentum.',
-    links: [{ href: '/leaderboard', label: 'Open Leaderboard' }]
-  },
-  atlas: {
-    title: 'Atlas District Map',
-    body: 'Explore chain districts, service storefronts, and opt-out controls for ERC-8004 entries.',
-    links: [{ href: '/atlas', label: 'Open Atlas' }]
-  },
-  trainer: {
-    title: 'Experience Trainer',
-    body: 'Replay UX journeys with deterministic runs and inspect tool traces.',
-    links: [{ href: '/trainer', label: 'Open Trainer' }]
-  }
-};
-
+/* ── Hotspot positions mapped to buildings in the town illustration ── */
 const HOTSPOTS = [
-  { id: 'leaderboard', label: 'Town Board', left: '18%', top: '22%' },
-  { id: 'atlas', label: 'Atlas Depot', left: '52%', top: '18%' },
-  { id: 'house', label: 'Plan Wagons', left: '24%', top: '58%' },
-  { id: 'trainer', label: 'Trainer Hall', left: '62%', top: '56%' }
+  { id: 'leaderboard', label: 'Town Board', left: '50%', top: '24%' },
+  { id: 'atlas',       label: 'Atlas Depot', left: '20%', top: '38%' },
+  { id: 'trainer',     label: 'Trainer Hall', left: '80%', top: '38%' },
+  { id: 'house',       label: 'Plan Wagons', left: '50%', top: '78%' },
+  { id: 'share',       label: 'Share Card',  left: '50%', top: '53%' }
 ];
 
-export default function TownHubPrototype() {
-  const [districtOpen, setDistrictOpen] = useState('house');
-  const [districtModalOpen, setDistrictModalOpen] = useState(false);
-  const [trainerOpen, setTrainerOpen] = useState(false);
+/* ──────────────────────────────────────────────────────────────────── */
+/*  Modal content components                                           */
+/* ──────────────────────────────────────────────────────────────────── */
 
-  const detail = DISTRICT_DETAILS[districtOpen] || DISTRICT_DETAILS.house;
+function HouseModal() {
+  return (
+    <div className="modalBody">
+      <div className="gridTwo">
+        <div className="panel">
+          <h3 className="panelHeader">Unlock</h3>
+          <p className="small">Sign with wallet to unlock encrypted house state.</p>
+          <div className="row" style={{ marginTop: 10 }}>
+            <button className="btn primary" type="button">Connect wallet</button>
+            <button className="btn" type="button">Sign to unlock</button>
+          </div>
+          <p className="small" style={{ marginTop: 8 }}>No unencrypted key material is stored server-side.</p>
+        </div>
+        <div className="panel">
+          <h3 className="panelHeader">ERC-8004 Link</h3>
+          <p className="small">Attach chain-aware identity and publish discoverable mapping.</p>
+          <div className="row" style={{ marginTop: 10 }}>
+            <button className="btn teal" type="button">Mint identity</button>
+            <button className="btn" type="button">Link to house</button>
+            <button className="btn bad" type="button">Opt out</button>
+          </div>
+          <p className="small" style={{ marginTop: 8 }}>Opt-out removes storefront visibility and hides public share.</p>
+        </div>
+      </div>
+      <div className="panel">
+        <h3 className="panelHeader">Media Slots</h3>
+        <p className="small">Share hero + human avatar + agent avatar + service cards.</p>
+        <div className="row" style={{ marginTop: 8 }}>
+          <span className="chip">shareHeroImageUrl</span>
+          <span className="chip">humanAvatarImageUrl</span>
+          <span className="chip">agentAvatarImageUrl</span>
+          <span className="chip">{'serviceCardImages[]'}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LeaderboardModal() {
+  return (
+    <div className="modalBody">
+      <div className="row" style={{ marginBottom: 4 }}>
+        <span className="chip">Signups: 3,412</span>
+        <span className="chip">Public teams: {LEADERBOARD_ROWS.length}</span>
+        <span className="chip">Referrals: 339</span>
+      </div>
+      <div className="tableLike">
+        <div className="tableHeader">
+          <span>Team</span>
+          <span>Chain</span>
+          <span>Referrals</span>
+          <span>Views</span>
+        </div>
+        {LEADERBOARD_ROWS.map((row) => (
+          <div className="tableRow" key={row.id}>
+            <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 13 }}>{row.team}</strong>
+            <span>{row.chain}</span>
+            <span>{row.referrals}</span>
+            <span>{row.views}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AtlasModal() {
+  return (
+    <div className="modalBody">
+      <AtlasPrototype />
+    </div>
+  );
+}
+
+function TrainerModal() {
+  return (
+    <div className="modalBody">
+      <p className="small">Deterministic run harness for UX journey replay.</p>
+      <div className="row">
+        <button className="btn primary" type="button">Run 1</button>
+        <button className="btn" type="button">Run 3</button>
+        <button className="btn" type="button">Run 10</button>
+        <button className="btn bad" type="button">Clear all</button>
+      </div>
+      <div className="gridTwo">
+        <div className="panel">
+          <h3 className="panelHeader">Attempts</h3>
+          <div className="listCompact">
+            {TRAINER_ATTEMPTS.map((attempt) => (
+              <div className="listRow" key={attempt.id}>
+                <strong>{attempt.id}</strong>
+                <span className="chip">{attempt.status}</span>
+                <span className="small">score {(attempt.score * 100).toFixed(0)}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="panel">
+          <h3 className="panelHeader">Inspector + Tools</h3>
+          <div className="row" style={{ marginBottom: 8 }}>
+            <span className="chip">Trace</span>
+            <span className="chip">Tool Lab</span>
+            <span className="chip">Traffic</span>
+            <span className="chip">Session</span>
+          </div>
+          <pre className="codeBlock">tool.invoke({`{ name: 'claim.create', args: { chain: 'evm' } }`})</pre>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ShareModal() {
+  return (
+    <div className="modalBody">
+      <p className="small">High-distribution card for social sharing with generated house hero.</p>
+      <div className="gridTwo">
+        <div className="panel">
+          <h3 className="panelHeader">House Hero</h3>
+          <div className="imagePlaceholder">Generated Wild-West house image</div>
+          <p className="small" style={{ marginTop: 8 }}>Prompt includes style anchor + district scene + agent persona cues.</p>
+        </div>
+        <div className="panel">
+          <h3 className="panelHeader">Team</h3>
+          <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 14 }}>human: alex-river</strong>
+          <br />
+          <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 14 }}>agent: proof-ranger</strong>
+          <div className="row" style={{ marginTop: 12 }}>
+            <button className="btn primary" type="button">Sign up</button>
+            <button className="btn teal" type="button">Add friend</button>
+            <button className="btn" type="button">Open storefront</button>
+          </div>
+          <div className="row" style={{ marginTop: 10 }}>
+            <span className="chip">X post linked</span>
+            <span className="chip">Moltbook linked</span>
+            <span className="chip">services: 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Modal titles mapping ── */
+const MODAL_CONFIG = {
+  house:       { title: 'Plan Wagons', Component: HouseModal },
+  leaderboard: { title: 'Town Board', Component: LeaderboardModal },
+  atlas:       { title: 'Atlas Depot', Component: AtlasModal },
+  trainer:     { title: 'Trainer Hall', Component: TrainerModal },
+  share:       { title: 'Share Card', Component: ShareModal }
+};
+
+/* ──────────────────────────────────────────────────────────────────── */
+/*  Main TownHubPrototype                                              */
+/* ──────────────────────────────────────────────────────────────────── */
+export default function TownHubPrototype() {
+  const [activeModal, setActiveModal] = useState(null);
+
+  const openModal = useCallback((id) => setActiveModal(id), []);
+  const closeModal = useCallback(() => setActiveModal(null), []);
+
+  /* Close modal on Escape */
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === 'Escape') closeModal();
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [closeModal]);
 
   const mapSummary = useMemo(() => {
-    const totalAgents = DISTRICTS.reduce((sum, district) => sum + district.agentCount, 0);
-    const totalServices = DISTRICTS.reduce((sum, district) => sum + district.serviceCount, 0);
+    const totalAgents = DISTRICTS.reduce((sum, d) => sum + d.agentCount, 0);
+    const totalServices = DISTRICTS.reduce((sum, d) => sum + d.serviceCount, 0);
     return { totalAgents, totalServices };
   }, []);
 
-  const highlightedAgents = useMemo(() => {
-    if (districtOpen !== 'atlas') return [];
-    return DISTRICTS.flatMap((district) => getStorefrontsByDistrict(district.id)).slice(0, 4);
-  }, [districtOpen]);
+  const modalConfig = activeModal ? MODAL_CONFIG[activeModal] : null;
 
   return (
     <>
-      <section className="townGrid">
-        <div className="panel">
-          <h1 style={{ marginTop: 0 }}>Town Hub Prototype</h1>
-          <p className="small" style={{ marginTop: 0 }}>
-            One-screen navigation model with district modals, trainer modal, and persistent agent dock.
-          </p>
+      {/* Brand overlay (top-left) */}
+      <BrandOverlay onOpenModal={openModal} />
 
-          <div className="townMap" aria-label="District map prototype">
-            {HOTSPOTS.map((spot) => (
-              <button
-                key={spot.id}
-                className="districtHotspot"
-                style={{ left: spot.left, top: spot.top }}
-                type="button"
-                onClick={() => {
-                  setDistrictOpen(spot.id);
-                  setDistrictModalOpen(true);
-                }}
-              >
-                {spot.label}
-              </button>
-            ))}
-          </div>
+      {/* Town map (full viewport) */}
+      <section className="townMap" aria-label="Agent Town map">
+        <div className="townMapOverlay" />
 
-          <div className="row" style={{ marginTop: 10 }}>
-            <span className="chip">districts: {DISTRICTS.length}</span>
-            <span className="chip">agents: {mapSummary.totalAgents.toLocaleString()}</span>
-            <span className="chip">service-like: {mapSummary.totalServices.toLocaleString()}</span>
-          </div>
+        {/* Clickable building hotspots */}
+        {HOTSPOTS.map((spot) => (
+          <button
+            key={spot.id}
+            className="districtHotspot"
+            style={{ left: spot.left, top: spot.top }}
+            type="button"
+            onClick={() => openModal(spot.id)}
+            aria-label={`Open ${spot.label}`}
+          >
+            <span className="hotspotPulse" />
+            <span className="hotspotLabel">{spot.label}</span>
+          </button>
+        ))}
+
+        {/* Stats bar at bottom of map */}
+        <div className="mapStats">
+          <span className="mapChip">districts: {DISTRICTS.length}</span>
+          <span className="mapChip">agents: {mapSummary.totalAgents.toLocaleString()}</span>
+          <span className="mapChip">services: {mapSummary.totalServices.toLocaleString()}</span>
         </div>
-
-        <aside className="panel townSidePanel">
-          <h2 style={{ marginTop: 0 }}>Current District</h2>
-          <strong>{detail.title}</strong>
-          <p className="small">{detail.body}</p>
-          <div className="row">
-            {detail.links.map((item) => (
-              <Link className="btn" key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-            <button className="btn" type="button" onClick={() => setDistrictModalOpen(true)}>
-              Open District Modal
-            </button>
-            <button className="btn" type="button" onClick={() => setTrainerOpen(true)}>
-              Open Trainer Modal
-            </button>
-          </div>
-          {districtOpen === 'atlas' ? (
-            <div className="panel" style={{ marginTop: 10, padding: 10 }}>
-              <div className="small">Featured storefronts</div>
-              <div className="listCompact">
-                {highlightedAgents.map((agent) => (
-                  <div className="listRow" key={agent.id}>
-                    <strong>{agent.name}</strong>
-                    <span className="small">{agent.chain}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </aside>
       </section>
 
-      {districtModalOpen ? (
-        <div className="modalBackdrop" role="presentation">
-          <div className="modal" role="dialog" aria-label="District detail">
-            <div className="row" style={{ justifyContent: 'space-between' }}>
-              <strong>{detail.title}</strong>
-              <button className="btn" type="button" onClick={() => setDistrictModalOpen(false)}>
-                Close
+      {/* Agent Dock */}
+      <AgentDock />
+
+      {/* Modal overlay */}
+      {modalConfig && (
+        <div className="modalBackdrop" role="presentation" onClick={closeModal}>
+          <div
+            className="modal"
+            role="dialog"
+            aria-label={modalConfig.title}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modalHeader">
+              <h2 className="modalTitle">{modalConfig.title}</h2>
+              <button className="modalClose" type="button" onClick={closeModal} aria-label="Close">
+                {'X'}
               </button>
             </div>
-            <p className="small">{detail.body}</p>
-            <div className="row">
-              {detail.links.map((item) => (
-                <Link className="btn" key={`modal-${item.href}`} href={item.href}>
-                  {item.label}
-                </Link>
-              ))}
-              <button className="btn" type="button" onClick={() => setTrainerOpen(true)}>
-                Trainer
-              </button>
-            </div>
+            <modalConfig.Component />
           </div>
         </div>
-      ) : null}
-
-      {trainerOpen ? (
-        <div className="modalBackdrop" role="presentation">
-          <section className="modal" role="dialog" aria-label="Trainer modal prototype">
-            <div className="row" style={{ justifyContent: 'space-between' }}>
-              <strong>Experience Trainer</strong>
-              <button className="btn" type="button" onClick={() => setTrainerOpen(false)}>
-                Close
-              </button>
-            </div>
-            <div className="gridTwo">
-              <div className="panel" style={{ margin: 0 }}>
-                <div className="small">Attempts</div>
-                <div className="listCompact">
-                  <div className="listRow"><strong>a-201</strong><span className="chip">pass</span></div>
-                  <div className="listRow"><strong>a-200</strong><span className="chip">pass</span></div>
-                  <div className="listRow"><strong>a-199</strong><span className="chip">fail</span></div>
-                </div>
-              </div>
-              <div className="panel" style={{ margin: 0 }}>
-                <div className="small">Debug tabs</div>
-                <div className="row">
-                  <span className="chip">Trace</span>
-                  <span className="chip">Tools</span>
-                  <span className="chip">Traffic</span>
-                  <span className="chip">Brain</span>
-                </div>
-                <p className="small">Mirror of the existing trainer shell for styling experiments.</p>
-              </div>
-            </div>
-          </section>
-        </div>
-      ) : null}
+      )}
     </>
   );
 }

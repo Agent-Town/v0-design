@@ -1,34 +1,11 @@
-import TopBar from '../../components/TopBar';
-import { LEADERBOARD_ROWS } from '../../lib/mockData';
+import Link from 'next/link';
 
 export default function LeaderboardPage() {
   return (
-    <>
-      <TopBar title="Leaderboard" subtitle="Human + agent teams" />
-      <section className="panel">
-        <div className="row" style={{ marginBottom: 8 }}>
-          <span className="chip">Signups: 3,412</span>
-          <span className="chip">Public teams: {LEADERBOARD_ROWS.length}</span>
-          <span className="chip">Referrals: 339</span>
-        </div>
-
-        <div className="tableLike">
-          <div className="tableHeader">
-            <span>Team</span>
-            <span>Chain</span>
-            <span>Referrals</span>
-            <span>Views</span>
-          </div>
-          {LEADERBOARD_ROWS.map((row) => (
-            <div className="tableRow" key={row.id}>
-              <strong>{row.team}</strong>
-              <span>{row.chain}</span>
-              <span>{row.referrals}</span>
-              <span>{row.views}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-    </>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'var(--font-body)', color: 'var(--warm-cream)', gap: 16, textAlign: 'center', padding: 20 }}>
+      <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 28 }}>Town Board</h1>
+      <p style={{ fontSize: 15, opacity: 0.8 }}>This view is now accessible from the Town Hub map.</p>
+      <Link className="btn primary" href="/">Return to Town Hub</Link>
+    </div>
   );
 }

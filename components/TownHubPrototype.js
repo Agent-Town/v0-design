@@ -20,31 +20,46 @@ const HOTSPOTS = [
 function HouseModal() {
   return (
     <div className="modalBody">
+      <div style={{
+        textAlign: 'center',
+        padding: '16px 0 8px',
+        fontSize: 40,
+        filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+      }} aria-hidden="true">
+        {'\u{1F512}'}
+      </div>
+      <p className="small" style={{ textAlign: 'center', maxWidth: 400, margin: '0 auto' }}>
+        Your wagon plan is locked. Connect your wallet and sign to unlock your encrypted house state.
+      </p>
       <div className="gridTwo">
         <div className="panel">
-          <h3 className="panelHeader">Unlock</h3>
+          <h3 className="panelHeader">{'\u{1F511}'} Unlock Chest</h3>
           <p className="small">Sign with wallet to unlock encrypted house state.</p>
-          <div className="row" style={{ marginTop: 10 }}>
+          <div className="row" style={{ marginTop: 12 }}>
             <button className="btn primary" type="button">Connect wallet</button>
             <button className="btn" type="button">Sign to unlock</button>
           </div>
-          <p className="small" style={{ marginTop: 8 }}>No unencrypted key material is stored server-side.</p>
+          <p className="small" style={{ marginTop: 10, fontStyle: 'italic', opacity: 0.7 }}>
+            No unencrypted key material is stored server-side.
+          </p>
         </div>
         <div className="panel">
-          <h3 className="panelHeader">ERC-8004 Link</h3>
+          <h3 className="panelHeader">{'\u{26D3}'} ERC-8004 Link</h3>
           <p className="small">Attach chain-aware identity and publish discoverable mapping.</p>
-          <div className="row" style={{ marginTop: 10 }}>
+          <div className="row" style={{ marginTop: 12 }}>
             <button className="btn teal" type="button">Mint identity</button>
             <button className="btn" type="button">Link to house</button>
             <button className="btn bad" type="button">Opt out</button>
           </div>
-          <p className="small" style={{ marginTop: 8 }}>Opt-out removes storefront visibility and hides public share.</p>
+          <p className="small" style={{ marginTop: 10, fontStyle: 'italic', opacity: 0.7 }}>
+            Opt-out removes storefront visibility and hides public share.
+          </p>
         </div>
       </div>
       <div className="panel">
-        <h3 className="panelHeader">Media Slots</h3>
+        <h3 className="panelHeader">{'\u{1F5BC}'} Media Slots</h3>
         <p className="small">Share hero + human avatar + agent avatar + service cards.</p>
-        <div className="row" style={{ marginTop: 8 }}>
+        <div className="row" style={{ marginTop: 10 }}>
           <span className="chip">shareHeroImageUrl</span>
           <span className="chip">humanAvatarImageUrl</span>
           <span className="chip">agentAvatarImageUrl</span>
@@ -58,22 +73,36 @@ function HouseModal() {
 function LeaderboardModal() {
   return (
     <div className="modalBody">
-      <div className="row" style={{ marginBottom: 4 }}>
-        <span className="chip">Signups: 3,412</span>
-        <span className="chip">Public teams: {LEADERBOARD_ROWS.length}</span>
-        <span className="chip">Referrals: 339</span>
+      <div className="row" style={{ justifyContent: 'center', gap: 12 }}>
+        <div className="panel" style={{ textAlign: 'center', flex: '1 1 120px' }}>
+          <div style={{ fontSize: 24, marginBottom: 4 }} aria-hidden="true">{'\u{1F465}'}</div>
+          <div style={{ fontFamily: 'var(--font-heading)', fontSize: 18, color: 'var(--dark-wood)' }}>3,412</div>
+          <div className="small">Signups</div>
+        </div>
+        <div className="panel" style={{ textAlign: 'center', flex: '1 1 120px' }}>
+          <div style={{ fontSize: 24, marginBottom: 4 }} aria-hidden="true">{'\u{1F3C6}'}</div>
+          <div style={{ fontFamily: 'var(--font-heading)', fontSize: 18, color: 'var(--dark-wood)' }}>{LEADERBOARD_ROWS.length}</div>
+          <div className="small">Public teams</div>
+        </div>
+        <div className="panel" style={{ textAlign: 'center', flex: '1 1 120px' }}>
+          <div style={{ fontSize: 24, marginBottom: 4 }} aria-hidden="true">{'\u{1F4E8}'}</div>
+          <div style={{ fontFamily: 'var(--font-heading)', fontSize: 18, color: 'var(--dark-wood)' }}>339</div>
+          <div className="small">Referrals</div>
+        </div>
       </div>
       <div className="tableLike">
         <div className="tableHeader">
-          <span>Team</span>
+          <span>{'\u{2B50}'} Team</span>
           <span>Chain</span>
           <span>Referrals</span>
           <span>Views</span>
         </div>
-        {LEADERBOARD_ROWS.map((row) => (
+        {LEADERBOARD_ROWS.map((row, i) => (
           <div className="tableRow" key={row.id}>
-            <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 13 }}>{row.team}</strong>
-            <span>{row.chain}</span>
+            <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 13 }}>
+              {i < 3 ? ['#1 ', '#2 ', '#3 '][i] : ''}{row.team}
+            </strong>
+            <span className="chip" style={{ fontSize: 10, padding: '2px 8px' }}>{row.chain}</span>
             <span>{row.referrals}</span>
             <span>{row.views}</span>
           </div>
@@ -94,29 +123,48 @@ function AtlasModal() {
 function TrainerModal() {
   return (
     <div className="modalBody">
-      <p className="small">Deterministic run harness for UX journey replay.</p>
-      <div className="row">
-        <button className="btn primary" type="button">Run 1</button>
-        <button className="btn" type="button">Run 3</button>
-        <button className="btn" type="button">Run 10</button>
-        <button className="btn bad" type="button">Clear all</button>
+      <div className="panel" style={{ textAlign: 'center', background: 'linear-gradient(180deg, rgba(139,125,60,0.15), transparent)' }}>
+        <p className="small" style={{ marginBottom: 10, fontSize: 14 }}>
+          {'\u{2694}'} Deterministic run harness for UX journey replay
+        </p>
+        <div className="row" style={{ justifyContent: 'center' }}>
+          <button className="btn primary" type="button">{'\u{25B6}'} Run 1</button>
+          <button className="btn" type="button">Run 3</button>
+          <button className="btn" type="button">Run 10</button>
+          <button className="btn bad" type="button">Clear all</button>
+        </div>
       </div>
       <div className="gridTwo">
         <div className="panel">
-          <h3 className="panelHeader">Attempts</h3>
+          <h3 className="panelHeader">{'\u{1F3AF}'} Attempts</h3>
           <div className="listCompact">
-            {TRAINER_ATTEMPTS.map((attempt) => (
-              <div className="listRow" key={attempt.id}>
-                <strong>{attempt.id}</strong>
-                <span className="chip">{attempt.status}</span>
-                <span className="small">score {(attempt.score * 100).toFixed(0)}%</span>
-              </div>
-            ))}
+            {TRAINER_ATTEMPTS.map((attempt) => {
+              const pct = (attempt.score * 100).toFixed(0);
+              return (
+                <div className="listRow" key={attempt.id}>
+                  <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 12 }}>{attempt.id}</strong>
+                  <span className="chip">{attempt.status}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{
+                      width: 48, height: 6, borderRadius: 3,
+                      background: 'var(--sand-dark)',
+                      overflow: 'hidden'
+                    }}>
+                      <div style={{
+                        width: `${pct}%`, height: '100%', borderRadius: 3,
+                        background: Number(pct) > 70 ? 'var(--faded-teal)' : 'var(--ochre)'
+                      }} />
+                    </div>
+                    <span className="small">{pct}%</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="panel">
-          <h3 className="panelHeader">Inspector + Tools</h3>
-          <div className="row" style={{ marginBottom: 8 }}>
+          <h3 className="panelHeader">{'\u{1F527}'} Inspector + Tools</h3>
+          <div className="row" style={{ marginBottom: 10 }}>
             <span className="chip">Trace</span>
             <span className="chip">Tool Lab</span>
             <span className="chip">Traffic</span>
@@ -132,24 +180,43 @@ function TrainerModal() {
 function ShareModal() {
   return (
     <div className="modalBody">
-      <p className="small">High-distribution card for social sharing with generated house hero.</p>
+      <p className="small" style={{ textAlign: 'center', fontSize: 14 }}>
+        {'\u{1F4DC}'} High-distribution card for social sharing with generated house hero.
+      </p>
       <div className="gridTwo">
         <div className="panel">
-          <h3 className="panelHeader">House Hero</h3>
-          <div className="imagePlaceholder">Generated Wild-West house image</div>
-          <p className="small" style={{ marginTop: 8 }}>Prompt includes style anchor + district scene + agent persona cues.</p>
+          <h3 className="panelHeader">{'\u{1F3A8}'} House Hero</h3>
+          <div className="imagePlaceholder" style={{ minHeight: 200 }}>
+            {'\u{1F3E0}'} Generated Wild-West house image
+          </div>
+          <p className="small" style={{ marginTop: 10, fontStyle: 'italic' }}>
+            Prompt includes style anchor + district scene + agent persona cues.
+          </p>
         </div>
-        <div className="panel">
-          <h3 className="panelHeader">Team</h3>
-          <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 14 }}>human: alex-river</strong>
-          <br />
-          <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 14 }}>agent: proof-ranger</strong>
-          <div className="row" style={{ marginTop: 12 }}>
+        <div className="panel" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <h3 className="panelHeader">{'\u{1F464}'} Team</h3>
+          <div style={{
+            display: 'flex', flexDirection: 'column', gap: 6,
+            padding: 12, borderRadius: 'var(--radius-sm)',
+            background: 'rgba(91,138,138,0.1)', border: '2px solid rgba(91,138,138,0.25)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 18 }} aria-hidden="true">{'\u{1F920}'}</span>
+              <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 13 }}>alex-river</strong>
+              <span className="chip" style={{ fontSize: 9 }}>human</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 18 }} aria-hidden="true">{'\u{1F916}'}</span>
+              <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 13 }}>proof-ranger</strong>
+              <span className="chip" style={{ fontSize: 9 }}>agent</span>
+            </div>
+          </div>
+          <div className="row">
             <button className="btn primary" type="button">Sign up</button>
             <button className="btn teal" type="button">Add friend</button>
             <button className="btn" type="button">Open storefront</button>
           </div>
-          <div className="row" style={{ marginTop: 10 }}>
+          <div className="row">
             <span className="chip">X post linked</span>
             <span className="chip">Moltbook linked</span>
             <span className="chip">services: 3</span>
@@ -162,11 +229,11 @@ function ShareModal() {
 
 /* Modal titles mapping */
 const MODAL_CONFIG = {
-  house:       { title: 'Plan Wagons', Component: HouseModal },
-  leaderboard: { title: 'Town Board', Component: LeaderboardModal },
-  atlas:       { title: 'Atlas Depot', Component: AtlasModal },
-  trainer:     { title: 'Trainer Hall', Component: TrainerModal },
-  share:       { title: 'Share Card', Component: ShareModal }
+  house:       { title: 'Plan Wagons', theme: 'house', icon: '\u{1F512}', Component: HouseModal },
+  leaderboard: { title: 'Town Board', theme: 'leaderboard', icon: '\u{1F3C6}', Component: LeaderboardModal },
+  atlas:       { title: 'Atlas Depot', theme: 'atlas', icon: '\u{1F5FA}', Component: AtlasModal },
+  trainer:     { title: 'Trainer Hall', theme: 'trainer', icon: '\u{2694}', Component: TrainerModal },
+  share:       { title: 'Share Card', theme: 'share', icon: '\u{1F4DC}', Component: ShareModal }
 };
 
 /* --- Main TownHubPrototype --- */
@@ -235,12 +302,14 @@ export default function TownHubPrototype() {
             className="modal"
             role="dialog"
             aria-label={modalConfig.title}
+            data-theme={modalConfig.theme}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="modalHeader">
+              <span className="modalHeaderIcon" aria-hidden="true">{modalConfig.icon}</span>
               <h2 className="modalTitle">{modalConfig.title}</h2>
               <button className="modalClose" type="button" onClick={closeModal} aria-label="Close">
-                {'X'}
+                {'\u2715'}
               </button>
             </div>
             <modalConfig.Component />

@@ -6,7 +6,7 @@ import BrandOverlay from './TopBar';
 import AgentDock from './AgentDock';
 import AtlasPrototype from './AtlasPrototype';
 
-/* ── Hotspot positions mapped to buildings in the town illustration ── */
+/* Hotspot positions mapped to buildings in the town illustration */
 const HOTSPOTS = [
   { id: 'leaderboard', label: 'Town Board', left: '50%', top: '24%' },
   { id: 'atlas',       label: 'Atlas Depot', left: '20%', top: '38%' },
@@ -15,9 +15,7 @@ const HOTSPOTS = [
   { id: 'share',       label: 'Share Card',  left: '50%', top: '53%' }
 ];
 
-/* ──────────────────────────────────────────────────────────────────── */
-/*  Modal content components                                           */
-/* ──────────────────────────────────────────────────────────────────── */
+/* Modal content components */
 
 function HouseModal() {
   return (
@@ -162,7 +160,7 @@ function ShareModal() {
   );
 }
 
-/* ── Modal titles mapping ── */
+/* Modal titles mapping */
 const MODAL_CONFIG = {
   house:       { title: 'Plan Wagons', Component: HouseModal },
   leaderboard: { title: 'Town Board', Component: LeaderboardModal },
@@ -171,10 +169,9 @@ const MODAL_CONFIG = {
   share:       { title: 'Share Card', Component: ShareModal }
 };
 
-/* ──────────────────────��───────────────────────────────────────────── */
-/*  Main TownHubPrototype                                              */
-/* ──────────────────────────────────────────────────────────────────── */
+/* --- Main TownHubPrototype --- */
 export default function TownHubPrototype() {
+  console.log("[v0] TownHubPrototype rendering");
   const [activeModal, setActiveModal] = useState(null);
 
   const openModal = useCallback((id) => setActiveModal(id), []);

@@ -14,8 +14,8 @@
   --sunlight: #FFE4A0;
   --parchment: #F0DFC0;
 
-  --font-heading: var(--font-rye), 'Georgia', serif;
-  --font-body: var(--font-nunito), 'Segoe UI', sans-serif;
+  --font-heading: 'Rye', 'Georgia', serif;
+  --font-body: 'Nunito', 'Segoe UI', sans-serif;
 
   --radius-sm: 8px;
   --radius-md: 14px;

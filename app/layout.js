@@ -1,8 +1,4 @@
 import './globals.css';
-import { Rye, Nunito } from 'next/font/google';
-
-const rye = Rye({ weight: '400', subsets: ['latin'], variable: '--font-rye', display: 'swap' });
-const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito', display: 'swap' });
 
 export const metadata = {
   title: 'Agent Town',
@@ -11,8 +7,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${rye.variable} ${nunito.variable}`}>
-      <body style={{ background: '#2E1B0E', minHeight: '100vh' }}>
+    <html lang="en">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Rye&family=Nunito:wght@400;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>
         <main className="shell">{children}</main>
       </body>
     </html>
